@@ -16,13 +16,13 @@ export default function ProductCard({
   let tag = null;
   if (product.available <= 5) {
     tag = (
-      <span className="px-3 py-1 text-xs rounded-xl bg-orange-100 text-orange-600 font-semibold">
+      <span className="px-3 py-1 text-xs rounded-xl bg-orange-300 text-white font-semibold">
         Only {product.available} left
       </span>
     );
   } else {
     tag = (
-      <span className="px-3 py-1 text-xs rounded-xl bg-green-100 text-green-600 font-semibold">
+      <span className="px-3 py-1 text-xs rounded-xl bg-green-300 text-white font-semibold">
         Available
       </span>
     );
@@ -36,40 +36,36 @@ export default function ProductCard({
       <img
         src={product.img}
         alt={product.name}
-        className="w-28 h-24 object-contain rounded-xl bg-gray-50 flex-shrink-0"
+        className="w-50 h-50 object-contain rounded-xl bg-gray-50 flex-shrink-0"
       />
       <div className="flex-1 min-w-0 flex flex-col h-full">
-        <div className="flex items-start mb-1">
-          <span className="font-semibold text-lg text-gray-800 mr-2 max-w-[150px] truncate block">
+        <div className="flex items-start mb-2">
+          <span className="font-semibold text-lg text-gray-800 block">
             {product.name}
           </span>
         </div>
-        <span className="text-gray-500 text-[13px] leading-tight mb-2 block line-clamp-2">
+        <span className="text-gray-500 text-[13px] leading-tight mb-3 block">
           {product.description}
         </span>
         {tag}
-        <div className="flex items-end justify-between mt-auto pt-6">
-          <span className="text-black font-bold text-base">{product.price}</span>
+        <div className="flex items-end justify-between mt-auto pt-4">
+          <span className="text-gray-800 font-bold text-base pr-4">{product.price}</span>
           <div className="flex items-center gap-4">
             <button
               onClick={onCartToggle}
               className={classNames(
-                "transition-colors",
-                isCart ? "text-black" : "text-gray-400",
-                isOutOfStock ? "opacity-50 cursor-not-allowed" : "hover:text-black"
+                "transition-colors text-gray-400",
+                isOutOfStock ? "opacity-50 cursor-not-allowed" : "hover:text-gray-600"
               )}
               disabled={isOutOfStock}
             >
-              <FiShoppingCart size={22} />
+              <FiShoppingCart size={22} className={isCart ? "text-blue-500" : ""} />
             </button>
             <button
               onClick={onFavToggle}
-              className={classNames(
-                "transition-colors",
-                isFav ? "text-red-400" : "text-gray-400 hover:text-red-400"
-              )}
+              className="transition-colors text-gray-400 hover:text-gray-600"
             >
-              <FiHeart size={22} />
+              <FiHeart size={22} className={isFav ? "text-red-500" : ""} />
             </button>
           </div>
         </div>

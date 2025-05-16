@@ -49,14 +49,14 @@ export default function CartItem({ item, onQtyChange, onRemove, available = 0 })
               <div className="flex items-center gap-1">
                 <button
                   onClick={() => onQtyChange(item.qty - 1)}
-                  className="p-1 rounded-full bg-gray-100 hover:bg-gray-200"
+                  className="p-1 rounded-lg bg-red-400 text-white"
                 >
                   <FiMinus size={16} />
                 </button>
                 <span className="w-8 text-center font-medium">{item.qty}</span>
                 <button
                   onClick={() => onQtyChange(item.qty + 1)}
-                  className={`p-1 rounded-full bg-gray-100 ${
+                  className={`p-1 rounded-lg bg-green-400 text-white ${
                     isMaxQuantity ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-200"
                   }`}
                   disabled={isMaxQuantity}

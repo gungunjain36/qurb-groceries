@@ -24,6 +24,8 @@ export default function SearchBar({ value, onChange, placeholder = "Search", onF
           </button>
         </div>
       )}
+
+      
     </div>
   );
 }

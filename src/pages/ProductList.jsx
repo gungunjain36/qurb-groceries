@@ -79,7 +79,7 @@ export default function ProductList() {
         ) : filteredProducts.length === 0 ? (
           <div className="text-gray-400 text-center mt-16">No products found</div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pb-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pb-4 justify-items-start">
             {filteredProducts.map((p) => {
               const isInCart = cart.some((item) => item.id === p.id);
               return (

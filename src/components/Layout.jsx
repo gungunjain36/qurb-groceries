@@ -15,7 +15,7 @@ export default function Layout({ children, searchBar, favIds = [] }) {
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-2 md:p-8">
-      <div className="w-full max-w-6xl bg-white rounded-[2rem] shadow px-4 md:px-10 py-8 relative">
+      <div className="w-full max-w-max bg-white rounded-[2rem] shadow px-4 md:px-10 py-8 relative">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center gap-4">
           <div
