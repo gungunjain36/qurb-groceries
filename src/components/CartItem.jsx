@@ -59,7 +59,7 @@ export default function CartItem({ item, onQtyChange, onRemove, available = 0 })
                 <button
                   onClick={() => onQtyChange(item.qty + 1)}
                   className={`p-1 rounded-lg bg-green-400 text-white ${
-                    isMaxQuantity ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-200"
+                    isMaxQuantity ? "opacity-50 cursor-not-allowed" :"bg-gray-200"
                   }`}
                   disabled={isMaxQuantity}
                   type="button"
