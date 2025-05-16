@@ -78,7 +78,7 @@ export default function Checkout() {
                 </div>
               )}
               <div className="flex items-center py-5 border-t border-gray-100">
-                <div className="flex-1 text-gray-500 font-semibold">Total Discount</div>
+                <div className="flex-1 text-gray-500 font-semibold">Discount</div>
                 <div className="text-right font-medium text-gray-700">
                   £{discount.toFixed(2)}
                 </div>

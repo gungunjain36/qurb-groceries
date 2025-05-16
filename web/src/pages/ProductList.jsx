@@ -54,7 +54,7 @@ export default function ProductList() {
                 "px-6 py-2 rounded-full border",
                 category === c.value
                   ? "bg-black text-white border-black shadow-sm"
-                  : "bg-white text-gray-700 border-gray-200 hover:bg-gray-100"
+                  : "bg-white text-gray-700 border-gray-200 hover:bg-gray-100 hadow-lg"
               )}
             >
               {c.label}

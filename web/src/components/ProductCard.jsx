@@ -28,7 +28,7 @@ export default function ProductCard({
     );
   }
   return (
-    <div className="flex flex-row bg-white rounded-2xl shadow transition hover:shadow-lg p-5 gap-3 items-center min-h-[160px]">
+    <div className="flex flex-row bg-white rounded-2xl transition shadow-lg p-5 gap-3 items-center min-h-[160px]">
       <img
         src={product.img}
         alt={product.name}
