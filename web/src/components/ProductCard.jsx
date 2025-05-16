@@ -1,33 +1,59 @@
-import { useCart } from '../context/CartContext.jsx';
+import React from "react";
+import { FiShoppingCart, FiHeart } from "react-icons/fi";
 
-export default function ProductCard({ product }) {
-  const { addToCart } = useCart();
-  const stock = product.stock || 10; // Default stock for demo
+function classNames(...classes) {
+  return classes.filter(Boolean).join(" ");
+}
 
+export default function ProductCard({
+  product,
+  isFav = false,
+  isCart = false,
+  onFavToggle,
+  onCartToggle,
+}) {
+  // Tag logic — only 5 left or available
+  let tag = null;
+  if (product.available <= 5) {
+    tag = (
+      <span className="px-3 py-1 text-xs rounded-xl bg-orange-100 text-orange-600 font-semibold">Only {product.available} left</span>
+    );
+  } else {
+    tag = (
+      <span className="px-3 py-1 text-xs rounded-xl bg-green-100 text-green-600 font-semibold">Available</span>
+    );
+  }
   return (
-    <div className="p-4 bg-white rounded shadow">
-      <img src={product.image} alt={product.name} className="w-full h-32 object-contain mb-2" />
-      <h3 className="text-lg font-medium">{product.name}</h3>
-      <p className="text-sm text-gray-500">{product.description}</p>
-      <div className="flex justify-between items-center mt-2">
-        <span
-          className={`text-sm ${
-            stock >= 10 ? 'text-green-500' : 'text-orange-500'
-          }`}
-        >
-          {stock >= 10 ? 'Available' : `Only ${stock} left`}
-        </span>
-        <span className="text-lg font-semibold">£{product.price.toFixed(2)}</span>
+    <div className="flex flex-row bg-white rounded-2xl shadow transition hover:shadow-lg p-5 gap-3 items-center min-h-[160px]">
+      <img
+        src={product.img}
+        alt={product.name}
+        className="w-28 h-24 object-contain rounded-xl bg-gray-50 flex-shrink-0"
+      />
+      <div className="flex-1 min-w-0 flex flex-col h-full">
+        <div className="flex items-start mb-1">
+          <span className="font-semibold text-lg text-gray-800 mr-2 max-w-[150px] truncate block">
+            {product.name}
+          </span>
+        </div>
+        <span className="text-gray-500 text-[13px] leading-tight mb-2 block line-clamp-2">{product.description}</span>
+        {tag}
+        <div className="flex items-end justify-between mt-auto pt-6">
+          <span className="text-black font-bold text-base">{product.price}</span>
+          <div className="flex items-center gap-4">
+            <button onClick={onCartToggle} className={classNames(
+              "transition-colors", isCart ? "text-black" : "text-gray-400 hover:text-black"
+            )}>
+              <FiShoppingCart size={22} />
+            </button>
+            <button onClick={onFavToggle} className={classNames(
+              "transition-colors", isFav ? "text-red-400" : "text-gray-400 hover:text-red-400"
+            )}>
+              <FiHeart size={22} />
+            </button>
+          </div>
+        </div>
       </div>
-      <button
-        onClick={() => addToCart(product)}
-        disabled={stock === 0}
-        className={`w-full mt-2 py-2 rounded ${
-          stock === 0 ? 'bg-gray-300' : 'bg-green-500 text-white'
-        }`}
-      >
-        Add to Cart
-      </button>
     </div>
   );
 }

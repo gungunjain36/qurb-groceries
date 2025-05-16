@@ -1,56 +1,51 @@
-import { useCart } from '../context/CartContext.jsx';
+import React from "react";
+import { FiPlus, FiMinus, FiX } from "react-icons/fi";
 
-export default function CartItem({ item }) {
-  const { updateQuantity, removeFromCart } = useCart();
-
+export default function CartItem({ item, onQtyChange, onRemove }) {
   return (
-    <div className="flex items-center p-4 bg-white rounded shadow">
-      <img src={item.image} alt={item.name} className="w-16 h-16 object-contain mr-4" />
-      <div className="flex-1">
-        <h3 className="text-lg font-medium">
-          {item.name} {item.isFree && <span className="text-sm italic">(Free)</span>}
-        </h3>
-        <p className="text-sm text-gray-500">Product code: {item.id}</p>
-        <div className="flex items-center space-x-2 mt-2">
+    <div className="flex items-center bg-white rounded-2xl shadow-sm px-6 py-5 mb-4 gap-4">
+      <img
+        src={item.img}
+        alt={item.name}
+        className="w-16 h-14 object-contain rounded-xl bg-gray-50 flex-shrink-0"
+      />
+      <div className="flex flex-col justify-center min-w-[120px] flex-1">
+        <span className="font-semibold text-base text-gray-800">{item.name}</span>
+        <span className="text-gray-400 text-xs mt-1">Product code: {item.code || item.id || "0939JOE3"}</span>
+      </div>
+      <div className="flex-1 flex flex-col items-end">
+        {/* Qty control */}
+        <div className="flex items-center gap-2 mb-1">
           <button
-            onClick={() => updateQuantity(item.id, -1)}
-            className="w-8 h-8 bg-red-500 text-white rounded"
+            type="button"
+            className="bg-gray-200 rounded-full p-1.5 text-red-500 hover:bg-red-100 transition"
+            onClick={() => onQtyChange(item.qty - 1)}
+            disabled={item.qty <= 1}
           >
-            -
+            <FiMinus size={16} />
           </button>
-          <span>{item.quantity}</span>
+          <span className="text-base font-bold px-2 text-gray-700">{item.qty}</span>
           <button
-            onClick={() => updateQuantity(item.id, 1)}
-            className="w-8 h-8 bg-green-500 text-white rounded"
+            type="button"
+            className="bg-gray-200 rounded-full p-1.5 text-green-600 hover:bg-green-100 transition"
+            onClick={() => onQtyChange(item.qty + 1)}
+            disabled={item.qty >= item.available}
           >
-            +
+            <FiPlus size={16} />
           </button>
         </div>
+        {/* Only X left? */}
+        {item.available - item.qty < 5 ? (
+          <span className="px-3 py-1 text-xs rounded-xl bg-orange-100 text-orange-600 font-semibold inline-block">Only {item.available - item.qty} left</span>
+        ) : null}
       </div>
-      <div className="flex items-center space-x-2">
-        <span className="text-lg font-semibold">
-          £{(item.price * item.quantity).toFixed(2)}
-        </span>
-        <button
-          onClick={() => removeFromCart(item.id)}
-          className="text-red-500"
-        >
-          <svg
-            className="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M6 18L18 6M6 6l12 12"
-            />
-          </svg>
-        </button>
-      </div>
+      <div className="font-semibold text-gray-700 w-20 text-right">£{(parseFloat(item.price.replace(/[^\d.]/g, "")) * item.qty).toFixed(2)}</div>
+      <button
+        className="ml-4 text-gray-400 hover:text-green-500 rounded-full transition p-1.5 bg-gray-100"
+        onClick={onRemove}
+      >
+        <FiX size={22} />
+      </button>
     </div>
   );
 }
