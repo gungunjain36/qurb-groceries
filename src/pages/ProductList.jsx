@@ -53,18 +53,19 @@ export default function ProductList() {
         />
       }
     >
-      <div className="mt-6">
+      <div className="mt-4 sm:mt-6">
         {/* Category filter row */}
-        <div className="flex flex-wrap gap-3">
+        <div className="flex flex-col sm:flex-row sm:flex-wrap gap-2 sm:gap-3">
           {CATEGORIES.map((c) => (
             <button
               key={c.value}
               onClick={() => setCategory(c.value)}
+              type="button"
               className={classNames(
-                "px-6 py-2 rounded-full border",
+                "px-4 py-1.5 rounded-full border text-left sm:text-center text-sm w-full sm:w-auto",
                 category === c.value
-                  ? "bg-black text-white border-black shadow-sm"
-                  : "bg-white text-gray-700 border-gray-200 hover:bg-gray-100 hadow-lg"
+                  ? "bg-gray-100 text-gray-800 border-gray-200"
+                  : "bg-white text-gray-600 border-gray-200 hover:bg-gray-50"
               )}
             >
               {c.label}
@@ -72,14 +73,16 @@ export default function ProductList() {
           ))}
         </div>
         {/* Trending header */}
-        <div className="mt-7 mb-4 font-bold text-xl text-gray-700">Trending Items</div>
+        <div className="mt-6 sm:mt-7 mb-3 sm:mb-4 font-bold text-lg sm:text-xl text-gray-700">
+          Trending Items
+        </div>
         {/* Product grid */}
         {loading ? (
-          <div className="text-gray-400 text-center mt-16">Loading products...</div>
+          <div className="text-gray-400 text-center mt-8">Loading products...</div>
         ) : filteredProducts.length === 0 ? (
-          <div className="text-gray-400 text-center mt-16">No products found</div>
+          <div className="text-gray-400 text-center mt-8">No products found</div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pb-4 justify-items-start">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6 pb-4 justify-items-center">
             {filteredProducts.map((p) => {
               const isInCart = cart.some((item) => item.id === p.id);
               return (
