@@ -35,6 +35,7 @@ export default function ProductList() {
 
   return (
     <Layout
+      favIds={favIds} // Pass favIds to Layout
       searchBar={
         <SearchBar
           value={search}

@@ -3,10 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
 import CartItem from "../components/CartItem";
 import useCart from "../hooks/useCart";
+import { useFavorites } from "../context/FavouritesContext"; // Import useFavorites
 import Layout from "../components/Layout";
 
 export default function Checkout() {
   const { cart, appliedOffers, updateQty, removeFromCart, subtotal, discount, total } = useCart();
+  const { favIds } = useFavorites(); // Get favIds from context
   const navigate = useNavigate();
 
   // Debug: Log the cart and applied offers
@@ -14,7 +16,7 @@ export default function Checkout() {
   console.log("Checkout - Applied Offers:", appliedOffers);
 
   return (
-    <Layout>
+    <Layout favIds={favIds}> {/* Pass favIds to Layout */}
       <div className="mt-8">
         <button
           onClick={() => navigate("/")}
