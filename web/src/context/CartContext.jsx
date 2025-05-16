@@ -1,46 +1,60 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
+import { applyOffers } from "../utils/calculateOffers";
 
 const CartContext = createContext();
 
 export function CartProvider({ children }) {
   const [cart, setCart] = useState([]);
 
-  // Adds product with quantity (default 1)
   const addToCart = (item, qty = 1) => {
     setCart((prev) => {
-      const exists = prev.find((c) => c.id === item.id);
+      const exists = prev.find((c) => c.id === item.id && !c.isFree);
       if (exists) {
-        return prev.map((c) =>
-          c.id === item.id ? { ...c, qty: c.qty + qty } : c
+        return applyOffers(
+          prev.map((c) =>
+            c.id === item.id && !c.isFree ? { ...c, qty: c.qty + qty } : c
+          )
         );
       }
-      return [...prev, { ...item, qty }];
+      return applyOffers([...prev, { ...item, qty }]);
     });
   };
 
-  // Update quantity
   const updateQty = (id, qty) => {
-    setCart((prev) =>
-      prev.map((c) => (c.id === id ? { ...c, qty: Math.max(1, qty) } : c))
-    );
+    setCart((prev) => {
+      const updated = prev.map((c) =>
+        c.id === id && !c.isFree ? { ...c, qty: Math.max(1, qty) } : c
+      );
+      return applyOffers(updated);
+    });
   };
 
-  // Remove item
   const removeFromCart = (id) => {
-    setCart((prev) => prev.filter((c) => c.id !== id));
+    setCart((prev) => {
+      const updated = prev.filter((c) => c.id !== id);
+      return applyOffers(updated);
+    });
   };
 
-  // Empty
-  const emptyCart = () => setCart([]);
+  const emptyCart = () => {
+    setCart([]);
+  };
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, updateQty, removeFromCart, emptyCart }}>
+    <CartContext.Provider
+      value={{ cart, addToCart, updateQty, removeFromCart, emptyCart }}
+    >
       {children}
     </CartContext.Provider>
   );
 }
 
 export function useCartCtx() {
-  return useContext(CartContext);
+  const context = useContext(CartContext);
+  if (!context) {
+    throw new Error("useCartCtx must be used within a CartProvider");
+  }
+  return context;
 }
+
 export default CartContext;

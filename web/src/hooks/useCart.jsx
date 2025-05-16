@@ -1,15 +1,24 @@
 import { useCartCtx } from '../context/CartContext';
 
-const DISCOUNT_AMOUNT = 0; // can be dynamic later
-
 function useCart() {
   const { cart, addToCart, updateQty, removeFromCart, emptyCart } = useCartCtx();
+
   const subtotal = cart.reduce((sum, item) => {
-    const p = parseFloat(item.price.replace(/[^\d.]/g, ''));
-    return sum + (p * item.qty);
+    if (item.isFree) return sum;
+    const price = parseFloat(item.price.replace(/[^\d.]/g, ''));
+    return sum + price * item.qty;
   }, 0);
-  const discount = DISCOUNT_AMOUNT;
+
+  const discount = cart.reduce((sum, item) => {
+    if (!item.isFree) return sum;
+    const originalPrice = parseFloat(
+      item.originalPrice?.replace(/[^\d.]/g, '') || '0'
+    );
+    return sum + originalPrice * item.qty;
+  }, 0);
+
   const total = subtotal - discount;
+
   return {
     cart,
     addToCart,
