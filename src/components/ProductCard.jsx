@@ -27,6 +27,10 @@ export default function ProductCard({
       </span>
     );
   }
+
+  // Disable cart button if out of stock
+  const isOutOfStock = product.available === 0;
+
   return (
     <div className="flex flex-row bg-white rounded-2xl transition shadow-lg p-5 gap-3 items-center min-h-[160px]">
       <img
@@ -51,8 +55,10 @@ export default function ProductCard({
               onClick={onCartToggle}
               className={classNames(
                 "transition-colors",
-                isCart ? "text-black" : "text-gray-400 hover:text-black"
+                isCart ? "text-black" : "text-gray-400",
+                isOutOfStock ? "opacity-50 cursor-not-allowed" : "hover:text-black"
               )}
+              disabled={isOutOfStock}
             >
               <FiShoppingCart size={22} />
             </button>

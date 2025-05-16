@@ -1,7 +1,7 @@
 import React from "react";
 import { FiPlus, FiMinus, FiTrash2 } from "react-icons/fi";
 
-export default function CartItem({ item, onQtyChange, onRemove }) {
+export default function CartItem({ item, onQtyChange, onRemove, available = 0 }) {
   // Determine the specific offer label for free items
   const getOfferLabel = (item) => {
     if (!item.isFree) return null;
@@ -13,6 +13,9 @@ export default function CartItem({ item, onQtyChange, onRemove }) {
     }
     return "Free (Offer)";
   };
+
+  // Check if the increment button should be disabled
+  const isMaxQuantity = item.qty >= available;
 
   return (
     <div
@@ -53,7 +56,10 @@ export default function CartItem({ item, onQtyChange, onRemove }) {
                 <span className="w-8 text-center font-medium">{item.qty}</span>
                 <button
                   onClick={() => onQtyChange(item.qty + 1)}
-                  className="p-1 rounded-full bg-gray-100 hover:bg-gray-200"
+                  className={`p-1 rounded-full bg-gray-100 ${
+                    isMaxQuantity ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-200"
+                  }`}
+                  disabled={isMaxQuantity}
                 >
                   <FiPlus size={16} />
                 </button>

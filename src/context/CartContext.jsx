@@ -27,8 +27,13 @@ export function CartProvider({ children }) {
 
   const updateQty = (id, qty) => {
     setCart((prev) => {
+      // Find the product to get its availability
+      const product = products.find((p) => p.id === id);
+      const available = product ? product.available : 0;
+      // Cap the quantity at the available stock, with a minimum of 1
+      const newQty = Math.min(Math.max(1, qty), available);
       const updated = prev.map((c) =>
-        c.id === id && !c.isFree ? { ...c, qty: Math.max(1, qty) } : c
+        c.id === id && !c.isFree ? { ...c, qty: newQty } : c
       );
       const { updatedCart, appliedOffers } = applyOffers(updated, products);
       console.log("After updateQty - Updated Cart:", updatedCart);

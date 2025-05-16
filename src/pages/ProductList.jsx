@@ -21,7 +21,7 @@ export default function ProductList() {
   const [category, setCategory] = useState("all");
   const [search, setSearch] = useState("");
   const { products, loading } = useProducts();
-  const { cart, addToCart } = useCart();
+  const { cart, addToCart, removeFromCart } = useCart();
   const { favIds, toggleFavorite } = useFavorites();
 
   const filteredProducts = products.filter((p) => {
@@ -33,9 +33,18 @@ export default function ProductList() {
     );
   });
 
+  // Handle cart toggle: add if not in cart, remove if already in cart
+  const handleCartToggle = (product, isInCart) => {
+    if (isInCart) {
+      removeFromCart(product.id);
+    } else if (product.available > 0) { // Only add if stock is available
+      addToCart(product, 1);
+    }
+  };
+
   return (
     <Layout
-      favIds={favIds} // Pass favIds to Layout
+      favIds={favIds}
       searchBar={
         <SearchBar
           value={search}
@@ -71,16 +80,19 @@ export default function ProductList() {
           <div className="text-gray-400 text-center mt-16">No products found</div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pb-4">
-            {filteredProducts.map((p) => (
-              <ProductCard
-                key={p.id}
-                product={p}
-                isCart={cart.some((item) => item.id === p.id)}
-                isFav={favIds.includes(p.id)}
-                onFavToggle={() => toggleFavorite(p.id)}
-                onCartToggle={() => addToCart(p, 1)}
-              />
-            ))}
+            {filteredProducts.map((p) => {
+              const isInCart = cart.some((item) => item.id === p.id);
+              return (
+                <ProductCard
+                  key={p.id}
+                  product={p}
+                  isCart={isInCart}
+                  isFav={favIds.includes(p.id)}
+                  onFavToggle={() => toggleFavorite(p.id)}
+                  onCartToggle={() => handleCartToggle(p, isInCart)}
+                />
+              );
+            })}
           </div>
         )}
       </div>

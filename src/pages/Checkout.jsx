@@ -3,12 +3,14 @@ import { useNavigate } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
 import CartItem from "../components/CartItem";
 import useCart from "../hooks/useCart";
-import { useFavorites } from "../context/FavouritesContext"; // Import useFavorites
+import { useFavorites } from "../context/FavouritesContext";
+import { useProducts } from "../context/ProductContext"; // Import useProducts
 import Layout from "../components/Layout";
 
 export default function Checkout() {
   const { cart, appliedOffers, updateQty, removeFromCart, subtotal, discount, total } = useCart();
-  const { favIds } = useFavorites(); // Get favIds from context
+  const { favIds } = useFavorites();
+  const { products } = useProducts(); // Get products to access stock
   const navigate = useNavigate();
 
   // Debug: Log the cart and applied offers
@@ -16,7 +18,7 @@ export default function Checkout() {
   console.log("Checkout - Applied Offers:", appliedOffers);
 
   return (
-    <Layout favIds={favIds}> {/* Pass favIds to Layout */}
+    <Layout favIds={favIds}>
       <div className="mt-8">
         <button
           onClick={() => navigate("/")}
@@ -47,14 +49,20 @@ export default function Checkout() {
             )}
             {/* Cart items */}
             <div>
-              {cart.map((item) => (
-                <CartItem
-                  key={item.id + (item.isFree ? "-free" : "")}
-                  item={item}
-                  onQtyChange={(qty) => updateQty(item.id, qty)}
-                  onRemove={() => removeFromCart(item.id)}
-                />
-              ))}
+              {cart.map((item) => {
+                // Find the product in the products array to get its availability
+                const product = products.find((p) => p.id === item.id);
+                const available = product ? product.available : 0; // Default to 0 if not found
+                return (
+                  <CartItem
+                    key={item.id + (item.isFree ? "-free" : "")}
+                    item={item}
+                    onQtyChange={(qty) => updateQty(item.id, qty)}
+                    onRemove={() => removeFromCart(item.id)}
+                    available={available} // Pass available stock to CartItem
+                  />
+                );
+              })}
             </div>
             {/* Order summary */}
             <div className="border-t border-gray-200 mt-12">
