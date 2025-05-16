@@ -4,7 +4,7 @@ function useCart() {
   const { cart, appliedOffers, addToCart, updateQty, removeFromCart, emptyCart } = useCartCtx();
 
   const subtotal = cart.reduce((sum, item) => {
-    if (item.isFree) return sum;
+    // if (item.isFree) return sum;
     const price = parseFloat(item.price.replace(/[^\d.]/g, ''));
     return sum + price * item.qty;
   }, 0);

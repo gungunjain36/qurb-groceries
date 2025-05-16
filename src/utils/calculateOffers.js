@@ -13,10 +13,7 @@ export function applyOffers(cart, products) {
     p.name.toLowerCase().includes("coffee") && p.type.toLowerCase() === "drinks"
   );
 
-  // Debug: Log the matched products
-  console.log("Matched Coca-Cola:", cocaCola);
-  console.log("Matched Croissant:", croissant);
-  console.log("Matched Coffee:", coffee);
+
 
   // If any product is not found, return the cart unchanged with no offers
   if (!cocaCola || !croissant || !coffee) {
@@ -47,13 +44,13 @@ export function applyOffers(cart, products) {
   const freeCocaColaCount = Math.floor(cocaColaCount / 6);
   if (freeCocaColaCount > 0) {
     const cocaColaPrice = parseFloat(cocaCola.price.replace(/[^\d.]/g, ''));
-    const discount = cocaColaPrice * freeCocaColaCount;
+    const discount = cocaColaPrice;
     updatedCart.push({
       ...cocaCola,
       qty: freeCocaColaCount,
       isFree: true,
       originalPrice: cocaCola.price,
-      price: "£0.00",
+      price: cocaCola.price,
     });
     appliedOffers.push({
       description: `Buy 6 Coca-Cola, Get 1 Free (${freeCocaColaCount}x)`,
@@ -72,7 +69,7 @@ export function applyOffers(cart, products) {
       qty: freeCoffeeCount,
       isFree: true,
       originalPrice: coffee.price,
-      price: "£0.00",
+      price: coffee.price,
     });
     appliedOffers.push({
       description: `Buy 3 Croissants, Get a Free Coffee (${freeCoffeeCount}x)`,
