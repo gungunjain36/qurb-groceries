@@ -33,11 +33,10 @@ export default function ProductList() {
     );
   });
 
-  // Handle cart toggle: add if not in cart, remove if already in cart
   const handleCartToggle = (product, isInCart) => {
     if (isInCart) {
       removeFromCart(product.id);
-    } else if (product.available > 0) { // Only add if stock is available
+    } else if (product.available > 0) {
       addToCart(product, 1);
     }
   };
@@ -49,7 +48,7 @@ export default function ProductList() {
         <SearchBar
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search products..."
+          placeholder="Search"
         />
       }
     >
@@ -73,7 +72,7 @@ export default function ProductList() {
           ))}
         </div>
         {/* Trending header */}
-        <div className="mt-6 sm:mt-7 mb-3 sm:mb-4 font-bold text-lg sm:text-xl text-gray-700">
+        <div className="mt-6 sm:mt-7 mb-3 sm:mb-4 font-bold text-lg text-gray-800">
           Trending Items
         </div>
         {/* Product grid */}
@@ -82,7 +81,7 @@ export default function ProductList() {
         ) : filteredProducts.length === 0 ? (
           <div className="text-gray-400 text-center mt-8">No products found</div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6 pb-4 justify-items-center">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6 pb-4 justify-items-start">
             {filteredProducts.map((p) => {
               const isInCart = cart.some((item) => item.id === p.id);
               return (
