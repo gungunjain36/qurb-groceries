@@ -1,7 +1,7 @@
 import { useCartCtx } from '../context/CartContext';
 
 function useCart() {
-  const { cart, addToCart, updateQty, removeFromCart, emptyCart } = useCartCtx();
+  const { cart, appliedOffers, addToCart, updateQty, removeFromCart, emptyCart } = useCartCtx();
 
   const subtotal = cart.reduce((sum, item) => {
     if (item.isFree) return sum;
@@ -9,18 +9,13 @@ function useCart() {
     return sum + price * item.qty;
   }, 0);
 
-  const discount = cart.reduce((sum, item) => {
-    if (!item.isFree) return sum;
-    const originalPrice = parseFloat(
-      item.originalPrice?.replace(/[^\d.]/g, '') || '0'
-    );
-    return sum + originalPrice * item.qty;
-  }, 0);
+  const discount = appliedOffers.reduce((sum, offer) => sum + offer.discount, 0);
 
   const total = subtotal - discount;
 
   return {
     cart,
+    appliedOffers,
     addToCart,
     updateQty,
     removeFromCart,

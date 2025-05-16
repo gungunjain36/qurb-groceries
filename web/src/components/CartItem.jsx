@@ -1,66 +1,73 @@
 import React from "react";
-import { FiPlus, FiMinus, FiX } from "react-icons/fi";
+import { FiPlus, FiMinus, FiTrash2 } from "react-icons/fi";
 
 export default function CartItem({ item, onQtyChange, onRemove }) {
+  // Determine the specific offer label for free items
+  const getOfferLabel = (item) => {
+    if (!item.isFree) return null;
+    if (item.name === "Coca-Cola") {
+      return "Free Coca-Cola (Buy 6, Get 1 Offer)";
+    }
+    if (item.name === "Coffee") {
+      return "Free Coffee (Buy 3 Croissants Offer)";
+    }
+    return "Free (Offer)";
+  };
+
   return (
-    <div className="flex items-center bg-white rounded-2xl shadow-sm px-6 py-5 mb-4 gap-4">
+    <div
+      className={`flex flex-row bg-white rounded-2xl shadow p-5 gap-3 items-center min-h-[160px] mb-4 ${
+        item.isFree ? "bg-green-50" : ""
+      }`}
+    >
       <img
         src={item.img}
         alt={item.name}
-        className="w-16 h-14 object-contain rounded-xl bg-gray-50 flex-shrink-0"
+        className="w-28 h-24 object-contain rounded-xl bg-gray-50 flex-shrink-0"
       />
-      <div className="flex flex-col justify-center min-w-[120px] flex-1">
-        <span className="font-semibold text-base text-gray-800">
-          {item.name}
+      <div className="flex-1 min-w-0 flex flex-col h-full">
+        <div className="flex items-start justify-between mb-1">
+          <span className="font-semibold text-lg text-gray-800 max-w-[150px] truncate block">
+            {item.name}
+          </span>
           {item.isFree && (
-            <span className="ml-2 text-xs text-green-600 font-medium">
-              (Free Offer)
+            <span className="text-green-600 text-sm font-medium">
+              {getOfferLabel(item)}
             </span>
           )}
+        </div>
+        <span className="text-gray-500 text-[13px] leading-tight mb-2 block line-clamp-2">
+          {item.description}
         </span>
-        <span className="text-gray-400 text-xs mt-1">
-          Product code: {item.code || item.id || "0939JOE3"}
-        </span>
+        <div className="flex items-end justify-between mt-auto pt-6">
+          <span className="text-black font-bold text-base">{item.price}</span>
+          {!item.isFree && (
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-1">
+                <button
+                  onClick={() => onQtyChange(item.qty - 1)}
+                  className="p-1 rounded-full bg-gray-100 hover:bg-gray-200"
+                >
+                  <FiMinus size={16} />
+                </button>
+                <span className="w-8 text-center font-medium">{item.qty}</span>
+                <button
+                  onClick={() => onQtyChange(item.qty + 1)}
+                  className="p-1 rounded-full bg-gray-100 hover:bg-gray-200"
+                >
+                  <FiPlus size={16} />
+                </button>
+              </div>
+              <button
+                onClick={onRemove}
+                className="p-1 rounded-full bg-gray-100 hover:bg-gray-200"
+              >
+                <FiTrash2 size={16} />
+              </button>
+            </div>
+          )}
+        </div>
       </div>
-      <div className="flex-1 flex flex-col items-end">
-        {!item.isFree && (
-          <div className="flex items-center gap-2 mb-1">
-            <button
-              type="button"
-              className="bg-gray-200 rounded-full p-1.5 text-red-500 hover:bg-red-100 transition"
-              onClick={() => onQtyChange(item.qty - 1)}
-              disabled={item.qty <= 1}
-            >
-              <FiMinus size={16} />
-            </button>
-            <span className="text-base font-bold px-2 text-gray-700">
-              {item.qty}
-            </span>
-            <button
-              type="button"
-              className="bg-gray-200 rounded-full p-1.5 text-green-600 hover:bg-green-100 transition"
-              onClick={() => onQtyChange(item.qty + 1)}
-              disabled={item.qty >= item.available}
-            >
-              <FiPlus size={16} />
-            </button>
-          </div>
-        )}
-        {!item.isFree && item.available - item.qty < 5 && (
-          <span className="px-3 py-1 text-xs rounded-xl bg-orange-100 text-orange-600 font-semibold inline-block">
-            Only {item.available - item.qty} left
-          </span>
-        )}
-      </div>
-      <div className="font-semibold text-gray-700 w-20 text-right">
-        £{(parseFloat(item.price.replace(/[^\d.]/g, "")) * item.qty).toFixed(2)}
-      </div>
-      <button
-        className="ml-4 text-gray-400 hover:text-green-500 rounded-full transition p-1.5 bg-gray-100"
-        onClick={onRemove}
-      >
-        <FiX size={22} />
-      </button>
     </div>
   );
 }

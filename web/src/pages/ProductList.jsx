@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React, { useState } from "react";
 import SearchBar from "../components/SearchBar";
 import ProductCard from "../components/ProductCard";
 import useCart from "../hooks/useCart";
+import { useFavorites } from "../context/FavouritesContext";
+import { useProducts } from "../context/ProductContext";
 import Layout from "../components/Layout";
 
 const CATEGORIES = [
@@ -19,29 +20,9 @@ function classNames(...classes) {
 export default function ProductList() {
   const [category, setCategory] = useState("all");
   const [search, setSearch] = useState("");
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { products, loading } = useProducts();
   const { cart, addToCart } = useCart();
-  const [favIds, setFavIds] = useState([]);
-
-  useEffect(() => {
-    setLoading(true);
-    axios
-      .get("https://uxdlyqjm9i.execute-api.eu-west-1.amazonaws.com/s?category=all")
-      .then((res) => {
-        if (Array.isArray(res.data)) {
-          setProducts(res.data);
-        } else {
-          console.error("Invalid API response: Expected an array");
-          setProducts([]);
-        }
-      })
-      .catch((err) => {
-        console.error("Error fetching products:", err);
-        setProducts([]);
-      })
-      .finally(() => setLoading(false));
-  }, []);
+  const { favIds, toggleFavorite } = useFavorites();
 
   const filteredProducts = products.filter((p) => {
     const name = p.name || "";
@@ -95,13 +76,7 @@ export default function ProductList() {
                 product={p}
                 isCart={cart.some((item) => item.id === p.id)}
                 isFav={favIds.includes(p.id)}
-                onFavToggle={() =>
-                  setFavIds((ids) =>
-                    ids.includes(p.id)
-                      ? ids.filter((id) => id !== p.id)
-                      : [...ids, p.id]
-                  )
-                }
+                onFavToggle={() => toggleFavorite(p.id)}
                 onCartToggle={() => addToCart(p, 1)}
               />
             ))}

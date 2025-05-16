@@ -3,9 +3,15 @@ import { useNavigate } from "react-router-dom";
 import { FiHeart, FiShoppingCart } from "react-icons/fi";
 import useCart from "../hooks/useCart";
 
-export default function Layout({ children, searchBar }) {
+export default function Layout({ children, searchBar, favIds = [] }) {
   const navigate = useNavigate();
   const { cart } = useCart();
+
+  // Calculate total number of items in the cart by summing quantities
+  const totalCartItems = cart.reduce((sum, item) => sum + item.qty, 0);
+
+  // Total number of liked items
+  const totalLikedItems = favIds.length;
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-2 md:p-8">
@@ -29,7 +35,7 @@ export default function Layout({ children, searchBar }) {
             <div className="relative group">
               <FiHeart size={26} className="text-gray-400 cursor-pointer" />
               <span className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-xs font-bold">
-                3
+                {totalLikedItems}
               </span>
             </div>
             <div className="relative">
@@ -50,8 +56,8 @@ export default function Layout({ children, searchBar }) {
                   size={26}
                   className="text-gray-400 hover:text-black cursor-pointer"
                 />
-                <span className="absolute -top-1 -right-1 bg infección-400 text-white rounded-full w-4 h-4 flex items-center justify-center text-xs font-bold">
-                  {cart.length}
+                <span className="absolute -top-1 -right-1 bg-blue-400 text-white rounded-full w-4 h-4 flex items-center justify-center text-xs font-bold">
+                  {totalCartItems}
                 </span>
               </button>
             </div>

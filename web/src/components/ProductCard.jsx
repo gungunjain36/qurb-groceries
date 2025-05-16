@@ -16,11 +16,15 @@ export default function ProductCard({
   let tag = null;
   if (product.available <= 5) {
     tag = (
-      <span className="px-3 py-1 text-xs rounded-xl bg-orange-100 text-orange-600 font-semibold">Only {product.available} left</span>
+      <span className="px-3 py-1 text-xs rounded-xl bg-orange-100 text-orange-600 font-semibold">
+        Only {product.available} left
+      </span>
     );
   } else {
     tag = (
-      <span className="px-3 py-1 text-xs rounded-xl bg-green-100 text-green-600 font-semibold">Available</span>
+      <span className="px-3 py-1 text-xs rounded-xl bg-green-100 text-green-600 font-semibold">
+        Available
+      </span>
     );
   }
   return (
@@ -36,19 +40,29 @@ export default function ProductCard({
             {product.name}
           </span>
         </div>
-        <span className="text-gray-500 text-[13px] leading-tight mb-2 block line-clamp-2">{product.description}</span>
+        <span className="text-gray-500 text-[13px] leading-tight mb-2 block line-clamp-2">
+          {product.description}
+        </span>
         {tag}
         <div className="flex items-end justify-between mt-auto pt-6">
           <span className="text-black font-bold text-base">{product.price}</span>
           <div className="flex items-center gap-4">
-            <button onClick={onCartToggle} className={classNames(
-              "transition-colors", isCart ? "text-black" : "text-gray-400 hover:text-black"
-            )}>
+            <button
+              onClick={onCartToggle}
+              className={classNames(
+                "transition-colors",
+                isCart ? "text-black" : "text-gray-400 hover:text-black"
+              )}
+            >
               <FiShoppingCart size={22} />
             </button>
-            <button onClick={onFavToggle} className={classNames(
-              "transition-colors", isFav ? "text-red-400" : "text-gray-400 hover:text-red-400"
-            )}>
+            <button
+              onClick={onFavToggle}
+              className={classNames(
+                "transition-colors",
+                isFav ? "text-red-400" : "text-gray-400 hover:text-red-400"
+              )}
+            >
               <FiHeart size={22} />
             </button>
           </div>
